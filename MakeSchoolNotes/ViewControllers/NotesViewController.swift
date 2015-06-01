@@ -10,10 +10,12 @@ import UIKit
 import Realm
 
 class NotesViewController: UIViewController {
+    
+    @IBOutlet weak var tableView: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        tableView.dataSource = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -23,3 +25,19 @@ class NotesViewController: UIViewController {
 
 }
 
+extension NotesViewController: UITableViewDataSource {
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("NoteCell", forIndexPath: indexPath) as! NoteTableViewCell
+
+        let row = indexPath.row
+        cell.textLabel?.text = "Hello World"
+        
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+    
+}
