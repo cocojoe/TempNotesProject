@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="5P2-fx-Fqc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="5P2-fx-Fqc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
     </dependencies>
     <scenes>
         <!--Dashboard-->
@@ -53,7 +53,7 @@
                     <navigationItem key="navigationItem" title="Dashboard" id="m7W-J0-R60">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="kVg-Uz-mXx">
                             <connections>
-                                <segue destination="DIH-h6-1QX" kind="presentation" id="LbM-pD-Eoy"/>
+                                <segue destination="yI3-Uj-dkQ" kind="show" id="mPa-Op-erI"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -69,8 +69,6 @@
         <!--New Note View Controller-->
         <scene sceneID="3yF-7n-UhW">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4Pj-6z-aCZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="tfw-Cd-jhI" userLabel="Exit" sceneMemberID="exit"/>
                 <viewController id="yI3-Uj-dkQ" userLabel="New Note View Controller" customClass="NewNoteViewController" customModule="MakeSchoolNotes" customModuleProvider="target" sceneMemberID="viewController">
                     <containerView key="view" opaque="NO" contentMode="scaleToFill" id="Gjy-3L-hPp">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -92,13 +90,15 @@
                         </barButtonItem>
                     </navigationItem>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4Pj-6z-aCZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="tfw-Cd-jhI" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2654" y="503"/>
+            <point key="canvasLocation" x="1852" y="503"/>
         </scene>
         <!--Note Display View Controller-->
         <scene sceneID="3eL-e6-hb0">
             <objects>
-                <viewController id="WuD-Ob-rv2" userLabel="Note Display View Controller" customClass="NoteDisplayViewController" sceneMemberID="viewController">
+                <viewController id="WuD-Ob-rv2" userLabel="Note Display View Controller" customClass="NoteDisplayViewController" customModule="MakeSchoolNotes" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="hc4-wr-va8"/>
                         <viewControllerLayoutGuide type="bottom" id="3rz-Ny-JBL"/>
@@ -148,26 +148,8 @@
             </objects>
             <point key="canvasLocation" x="388" y="503"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="j9b-yZ-K2E">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="DIH-h6-1QX" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="gIM-uj-ptJ">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="yI3-Uj-dkQ" kind="relationship" relationship="rootViewController" id="EJc-hQ-nwj"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Uq6-95-s4K" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1916" y="503"/>
-        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="ybL-bH-EGt"/>
+        <segue reference="qCW-cK-bMT"/>
     </inferredMetricsTieBreakers>
 </document>
