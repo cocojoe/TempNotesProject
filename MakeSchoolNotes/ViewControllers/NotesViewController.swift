@@ -62,6 +62,15 @@ class NotesViewController: UIViewController {
         
         notes = Note.allObjects().sortedResultsUsingProperty("modificationDate", ascending: false)
     }
+    
+    //MARK: Segues
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == "ShowExistingNote") {
+            let noteViewController = segue.destinationViewController as! NoteDisplayViewController
+            noteViewController.note = selectedNote
+        }
+    }
 }
 
 extension NotesViewController: UITableViewDataSource {

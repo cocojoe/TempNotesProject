@@ -6,33 +6,35 @@
 //  Copyright (c) 2015 MakeSchool. All rights reserved.
 //
 
+import Foundation
 import UIKit
+import Realm
+import ConvenienceKit
 
 class NoteDisplayViewController: UIViewController {
     
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var contentTextView: TextView!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    var note: Note? {
+        didSet {
+            displayNote(self.note)
+        }
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        displayNote(self.note)
     }
-    */
-
+    
+    //MARK: Business Logic
+    
+    func displayNote(note: Note?) {
+        if let note = note, titleTextField = titleTextField, contentTextView = contentTextView  {
+            titleTextField.text = note.title
+            contentTextView.text = note.content
+        }
+    }
+    
 }

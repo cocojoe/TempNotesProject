@@ -23,8 +23,6 @@ class NewNoteViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -32,9 +30,12 @@ class NewNoteViewController: UIViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
-        currentNote = Note()
-        currentNote!.title   = "Super Simple New Note"
-        currentNote!.content = "Yet More Content"
+        if (segue.identifier == "ShowNewNote") {
+            // create a new Note and hold onto it, to be able to save it later
+            currentNote = Note()
+            let noteViewController = segue.destinationViewController as! NoteDisplayViewController
+            noteViewController.note = currentNote
+        }
     }
 
 }
