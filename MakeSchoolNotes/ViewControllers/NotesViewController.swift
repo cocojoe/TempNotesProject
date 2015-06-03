@@ -21,29 +21,47 @@ class NotesViewController: UIViewController {
             }
         }
     }
+    
+    var selectedNote: Note?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
+        tableView.delegate = self
         
-        let myNote = Note()
-        myNote.title   = "Super Simple Test Note"
-        myNote.content = "A long piece of content"
-        
-        let realm = RLMRealm.defaultRealm()
-        realm.transactionWithBlock() {
-            //realm.deleteAllObjects(); // Testing
-            realm.addObject(myNote)
-        }
-        
-        notes = Note.allObjects();
+        notes = Note.allObjects().sortedResultsUsingProperty("modificationDate", ascending: false)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
+    //MARK: Button Actions
+    
+    @IBAction func unwindToSegue(segue: UIStoryboardSegue) {
+        
+        if let identifier = segue.identifier {
+            let realm = RLMRealm.defaultRealm()
+            
+            switch identifier {
+            case "Save":
+                let source = segue.sourceViewController as! NewNoteViewController
+                
+                realm.transactionWithBlock() {
+                    realm.addObject(source.currentNote)
+                }
+            case "Delete":
+                realm.transactionWithBlock() {
+                    realm.deleteObject(self.selectedNote)
+                }
+            default:
+                println("No one loves \(identifier)")
+            }
+        }
+        
+        notes = Note.allObjects().sortedResultsUsingProperty("modificationDate", ascending: false)
+    }
 }
 
 extension NotesViewController: UITableViewDataSource {
@@ -62,4 +80,31 @@ extension NotesViewController: UITableViewDataSource {
         return Int(notes?.count ?? 0)
     }
     
+}
+
+extension NotesViewController: UITableViewDelegate {
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        selectedNote = notes.objectAtIndex(UInt(indexPath.row)) as? Note  //1
+        self.performSegueWithIdentifier("ShowExistingNote", sender: self) //2
+    }
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    // 3
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if (editingStyle == .Delete) {
+            let note = notes[UInt(indexPath.row)] as! RLMObject
+            
+            let realm = RLMRealm.defaultRealm()
+            
+            realm.transactionWithBlock() {
+                realm.deleteObject(note)
+            }
+            
+            notes = Note.allObjects().sortedResultsUsingProperty("modificationDate", ascending: false)
+        }
+    }
 }
