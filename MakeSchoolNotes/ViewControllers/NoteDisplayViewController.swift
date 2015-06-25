@@ -31,6 +31,8 @@ class NoteDisplayViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        self.navigationController!.setNavigationBarHidden(false, animated: true)
+        
         displayNote(note)
         
         titleTextField.returnKeyType = .Next //1
@@ -48,7 +50,7 @@ class NoteDisplayViewController: UIViewController {
         
         keyboardNotificationHandler!.keyboardWillBeShownHandler = { (height: CGFloat) in
             UIView.animateWithDuration(0.3) {
-                self.toolbarBottomSpace.constant = height
+                self.toolbarBottomSpace.constant = -height
                 self.view.layoutIfNeeded()
             }
         }
@@ -59,8 +61,6 @@ class NoteDisplayViewController: UIViewController {
         
     }
     
-    //keyboardNotificationHandler = KeyboardNotificationHandler()
-
     
     //MARK: Business Logic
     

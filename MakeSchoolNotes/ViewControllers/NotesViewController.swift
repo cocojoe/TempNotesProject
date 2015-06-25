@@ -20,7 +20,25 @@ class NotesViewController: UIViewController {
         case SearchMode
     }
     
-    var state: State = .DefaultMode
+    var state: State = .DefaultMode {
+        didSet {
+            // update notes and search bar whenever State changes
+            switch (state) {
+            case .DefaultMode:
+                let realm = Realm()
+                notes = realm.objects(Note).sorted("modificationDate", ascending: false) //1
+                self.navigationController!.setNavigationBarHidden(false, animated: true) //2
+                searchBar.resignFirstResponder() // 3
+                searchBar.text = ""
+                searchBar.showsCancelButton = false
+            case .SearchMode:
+                let searchText = searchBar?.text ?? ""
+                searchBar.setShowsCancelButton(true, animated: true) //4
+                notes = searchNotes(searchText) //5
+                self.navigationController!.setNavigationBarHidden(true, animated: true) //6
+            }
+        }
+    }
     
     var notes: Results<Note>!  {
         didSet {
@@ -41,9 +59,11 @@ class NotesViewController: UIViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
+        
         let realm = Realm()
         notes = realm.objects(Note).sorted("modificationDate", ascending: false)
+        state = .DefaultMode
+        super.viewWillAppear(animated)
     }
     
 
@@ -94,6 +114,14 @@ class NotesViewController: UIViewController {
             noteViewController.note = selectedNote
         }
     }
+    
+    //MARK: Search
+    
+    func searchNotes(searchString: String) -> Results<Note> {
+        let realm = Realm()
+        let searchPredicate = NSPredicate(format: "title CONTAINS[c] %@ OR content CONTAINS[c] %@", searchString, searchString)
+        return realm.objects(Note).filter(searchPredicate)
+    }
 }
 
 extension NotesViewController: UITableViewDataSource {
@@ -140,4 +168,20 @@ extension NotesViewController: UITableViewDelegate {
             notes = realm.objects(Note).sorted("modificationDate", ascending: false)
         }
     }
+}
+
+extension NotesViewController: UISearchBarDelegate {
+    
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        state = .SearchMode
+    }
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        state = .DefaultMode
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        notes = searchNotes(searchText)
+    }
+    
 }

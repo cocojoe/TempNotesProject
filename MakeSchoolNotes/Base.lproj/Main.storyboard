@@ -20,6 +20,14 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="72" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="vyT-so-Oa6">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <searchBar key="tableHeaderView" contentMode="redraw" id="RzR-fl-N27">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                    <connections>
+                                        <outlet property="delegate" destination="CLt-16-2fF" id="uac-3J-Slh"/>
+                                    </connections>
+                                </searchBar>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NoteCell" rowHeight="72" id="uNN-Pj-S6R" customClass="NoteTableViewCell" customModule="MakeSchoolNotes" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
@@ -65,6 +73,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="searchBar" destination="RzR-fl-N27" id="g1G-Di-cyd"/>
                         <outlet property="tableView" destination="vyT-so-Oa6" id="BDo-fH-43b"/>
                         <segue destination="0LA-1r-ONc" kind="show" identifier="ShowExistingNote" id="vSm-tX-cNE"/>
                     </connections>
@@ -143,11 +152,11 @@
                         <viewControllerLayoutGuide type="bottom" id="5O2-IH-IaM"/>
                     </layoutGuides>
                     <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Sgo-FD-HHt">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7ax-gK-7lb">
-                                <rect key="frame" x="0.0" y="492" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
                                 <items>
                                     <barButtonItem systemItem="trash" id="Z8p-Wh-ytj">
                                         <connections>
@@ -157,7 +166,7 @@
                                 </items>
                             </toolbar>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xhb-bw-oSo">
-                                <rect key="frame" x="0.0" y="-44" width="600" height="536"/>
+                                <rect key="frame" x="0.0" y="-44" width="600" height="600"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="I am a title" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bOF-Sb-VCc">
                                         <rect key="frame" x="8" y="54" width="584" height="30"/>
@@ -201,6 +210,7 @@
                     <toolbarItems/>
                     <connections>
                         <outlet property="contentTextView" destination="oR0-cH-1C8" id="fbs-4n-TVv"/>
+                        <outlet property="deleteButton" destination="Z8p-Wh-ytj" id="GUK-0V-mGI"/>
                         <outlet property="titleTextField" destination="bOF-Sb-VCc" id="1vt-Ko-0se"/>
                         <outlet property="toolbarBottomSpace" destination="1gj-rZ-trJ" id="zsx-44-wAm"/>
                     </connections>
@@ -212,6 +222,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="eeT-Cl-cg9"/>
+        <segue reference="vSm-tX-cNE"/>
     </inferredMetricsTieBreakers>
 </document>
