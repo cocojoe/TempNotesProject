@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import Realm
+import RealmSwift
 
-class Note : RLMObject {
+class Note : Object {
     dynamic var title: String = ""
     dynamic var content: String = ""
     dynamic var modificationDate = NSDate()

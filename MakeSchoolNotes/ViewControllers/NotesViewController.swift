@@ -8,12 +8,21 @@
 
 import UIKit
 import Realm
+import RealmSwift
 
 class NotesViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
     
-    var notes: RLMResults! {
+    enum State {
+        case DefaultMode
+        case SearchMode
+    }
+    
+    var state: State = .DefaultMode
+    
+    var notes: Results<Note>!  {
         didSet {
             // Whenever notes update, update the table view
             if let tableView = tableView {
@@ -29,8 +38,15 @@ class NotesViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        notes = Note.allObjects().sortedResultsUsingProperty("modificationDate", ascending: false)
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        let realm = Realm()
+        notes = realm.objects(Note).sorted("modificationDate", ascending: false)
+    }
+    
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -42,25 +58,32 @@ class NotesViewController: UIViewController {
     @IBAction func unwindToSegue(segue: UIStoryboardSegue) {
         
         if let identifier = segue.identifier {
-            let realm = RLMRealm.defaultRealm()
             
             switch identifier {
             case "Save":
                 let source = segue.sourceViewController as! NewNoteViewController
+                let realm = Realm()
                 
-                realm.transactionWithBlock() {
-                    realm.addObject(source.currentNote)
+                realm.write() {
+                    realm.add(source.currentNote!)
                 }
             case "Delete":
-                realm.transactionWithBlock() {
-                    realm.deleteObject(self.selectedNote)
+                let realm = Realm()
+                
+                realm.write() {
+                    realm.delete(self.selectedNote!)
                 }
+                
+                let source = segue.sourceViewController as! NoteDisplayViewController
+                source.note = nil;
+                
             default:
                 println("No one loves \(identifier)")
             }
         }
         
-        notes = Note.allObjects().sortedResultsUsingProperty("modificationDate", ascending: false)
+        let realm = Realm()
+        notes = realm.objects(Note).sorted("modificationDate", ascending: false) //2
     }
     
     //MARK: Segues
@@ -78,8 +101,8 @@ extension NotesViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("NoteCell", forIndexPath: indexPath) as! NoteTableViewCell
 
-        let row = UInt(indexPath.row)
-        let note = notes[row] as! Note
+        let row = indexPath.row
+        let note = notes[row] as Note
         cell.note = note
         
         return cell
@@ -94,7 +117,7 @@ extension NotesViewController: UITableViewDataSource {
 extension NotesViewController: UITableViewDelegate {
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        selectedNote = notes.objectAtIndex(UInt(indexPath.row)) as? Note  //1
+        selectedNote = notes[indexPath.row] //1
         self.performSegueWithIdentifier("ShowExistingNote", sender: self) //2
     }
     
@@ -105,15 +128,16 @@ extension NotesViewController: UITableViewDelegate {
     // 3
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if (editingStyle == .Delete) {
-            let note = notes[UInt(indexPath.row)] as! RLMObject
             
-            let realm = RLMRealm.defaultRealm()
+            let note = notes[indexPath.row] as Object
             
-            realm.transactionWithBlock() {
-                realm.deleteObject(note)
+            let realm = Realm()
+            
+            realm.write() {
+                realm.delete(note)
             }
             
-            notes = Note.allObjects().sortedResultsUsingProperty("modificationDate", ascending: false)
+            notes = realm.objects(Note).sorted("modificationDate", ascending: false)
         }
     }
 }
